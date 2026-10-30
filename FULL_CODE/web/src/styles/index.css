@@ -1,0 +1,89 @@
+@import "tailwindcss";
+
+@theme {
+  --color-mednavy: #17324D;
+  --color-mednavy-hover: #12273D;
+  --color-mednavy-dark: #0D1C2B;
+  --color-medteal: #168C83;
+  --color-medteal-light: #E6F4F3;
+  --color-medteal-hover: #12726B;
+  --color-medgrey: #F4F6F8;
+  --color-medborder: #E2E8F0;
+  --color-medslate: #475569;
+  --color-medblue-50: #eff6ff;
+  --color-medblue-100: #dbeafe;
+  --color-medblue-600: #2563eb;
+  --color-medblue-700: #1d4ed8;
+}
+
+:root {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  color: #17324D;
+  background-color: #F4F6F8;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  margin: 0;
+  background-color: #F4F6F8;
+  color: #17324D;
+  min-height: 100vh;
+}
+
+#root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Print Styles for Clinical Reports & PDF Export (Phase 6) */
+@media print {
+  body {
+    background-color: #ffffff !important;
+    color: #0f172a !important;
+    font-size: 10.5pt !important;
+  }
+
+  /* Hide app navigation chrome and non-printable elements */
+  header,
+  aside,
+  nav,
+  .no-print,
+  .sidebar,
+  .topbar {
+    display: none !important;
+  }
+
+  main {
+    margin: 0 !important;
+    padding: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  .print-area {
+    display: block !important;
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    box-shadow: none !important;
+    border: none !important;
+  }
+
+  .print-avoid-break {
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+
+  .print-page-break {
+    page-break-before: always;
+    break-before: page;
+  }
+
+  /* Ensure background colors and borders render in print */
+  * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+}
