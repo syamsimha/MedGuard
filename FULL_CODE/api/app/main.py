@@ -2,7 +2,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.core.config import settings
-from app.routes import health
+from app.routes import health, safety
 
 app = FastAPI(
     title=settings.PROJECT_NAME,
@@ -21,9 +21,12 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Register routers: accessible at both /api/health and /health
+# Register routers: accessible at both /api/... and root for proxy compatibility
 app.include_router(health.router, prefix="/api")
 app.include_router(health.router)
+app.include_router(safety.router, prefix="/api")
+app.include_router(safety.router)
+
 
 @app.get("/", tags=["Root"])
 async def root():
@@ -34,8 +37,10 @@ async def root():
         "version": settings.VERSION,
         "status": "operational",
         "docs": "/docs",
-        "health": "/api/health"
+        "health": "/api/health",
+        "safety_check": "/api/safety/check"
     }
+
 
 if __name__ == "__main__":
     import uvicorn

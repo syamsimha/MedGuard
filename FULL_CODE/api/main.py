@@ -6,6 +6,7 @@ MedGuard: Medication Safety Intelligence
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.health import router as health_router
+from app.routes.safety import router as safety_router
 
 app = FastAPI(
     title="MedGuard API",
@@ -35,6 +36,11 @@ app.add_middleware(
 app.include_router(health_router)
 app.include_router(health_router, prefix="/api")
 
+# Mount safety engine routes
+app.include_router(safety_router)
+app.include_router(safety_router, prefix="/api")
+
+
 @app.get("/", tags=["Root"])
 def root():
     """Welcome endpoint for MedGuard API."""
@@ -43,8 +49,10 @@ def root():
         "tagline": "Every Prescription Deserves a Second Look",
         "status": "operational",
         "docs": "/docs",
-        "health": "/health"
+        "health": "/health",
+        "safety_check": "/api/safety/check"
     }
+
 
 if __name__ == "__main__":
     import uvicorn

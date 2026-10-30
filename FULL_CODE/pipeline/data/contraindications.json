@@ -1,0 +1,41 @@
+{
+  "version": "1.0.0",
+  "source": "FDA Prescribing Information Boxed Warnings & Clinical Decision Support Protocols",
+  "condition_contraindications": [
+    {
+      "rule_id": "CI-PRO-AST",
+      "drug": "propranolol",
+      "conditions": ["asthma", "bronchospasm", "severe copd"],
+      "severity": "CONTRAINDICATED",
+      "reason": "Non-selective beta-blockade prevents beta-2 mediated bronchodilation, creating high risk of acute, life-threatening bronchospasm in patients with reactive airway disease.",
+      "evidence_source": "FDA Inderal Prescribing Information, Section 4: Contraindications."
+    },
+    {
+      "rule_id": "CI-IBU-PUD",
+      "drug": "ibuprofen",
+      "conditions": ["peptic ulcer disease", "gastric ulcer", "active gastrointestinal bleeding"],
+      "severity": "CONTRAINDICATED",
+      "reason": "NSAID inhibition of COX-1 impairs gastric mucosal cytoprotection, with documented risk of ulcer perforation and massive hemorrhage.",
+      "evidence_source": "FDA Nonsteroidal Anti-inflammatory Drugs Boxed Warning; American College of Gastroenterology Ulcer Guidelines."
+    },
+    {
+      "rule_id": "CI-MTX-PRG",
+      "drug": "methotrexate",
+      "conditions": ["pregnancy"],
+      "severity": "CONTRAINDICATED",
+      "reason": "Methotrexate is a potent dihydrofolate reductase inhibitor causing embryo-fetal death and major congenital malformations (FDA Pregnancy Category X).",
+      "evidence_source": "FDA Trexall Prescribing Information, Boxed Warning: Teratogenicity."
+    }
+  ],
+  "allergy_contraindications": [
+    {
+      "rule_id": "CI-AMX-PEN",
+      "drug": "amoxicillin",
+      "allergens": ["penicillin", "amoxicillin", "ampicillin"],
+      "severity": "CONTRAINDICATED",
+      "reason": "Documented beta-lactam hypersensitivity carries high probability of severe allergic response including anaphylaxis, angioedema, or Stevens-Johnson syndrome.",
+      "evidence_source": "FDA Amoxil Prescribing Information, Section 4: Contraindications."
+    }
+  ]
+}
+
