@@ -1,3 +1,4 @@
+# MedGuard
 # MedGuard – Medication Safety Intelligence
 
 > **"Every Prescription Deserves a Second Look."**  
