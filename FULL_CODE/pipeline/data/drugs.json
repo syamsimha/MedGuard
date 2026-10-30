@@ -1,0 +1,266 @@
+{
+  "version": "1.1.0",
+  "source": "FDA Approved Drug Products with Therapeutic Equivalence Evaluations (Orange Book) & NLM RxNorm",
+  "drugs": {
+    "warfarin": {
+      "generic_name": "warfarin",
+      "brand_names": [
+        "coumadin",
+        "jantoven"
+      ],
+      "active_ingredients": [
+        "warfarin"
+      ],
+      "drug_class": "anticoagulant"
+    },
+    "aspirin": {
+      "generic_name": "aspirin",
+      "brand_names": [
+        "ecotrin",
+        "bayer aspirin",
+        "bufferin",
+        "acetylsalicylic acid",
+        "asa"
+      ],
+      "active_ingredients": [
+        "aspirin"
+      ],
+      "drug_class": "antiplatelet_nsaid"
+    },
+    "ibuprofen": {
+      "generic_name": "ibuprofen",
+      "brand_names": [
+        "advil",
+        "motrin",
+        "nurofen",
+        "calprofen"
+      ],
+      "active_ingredients": [
+        "ibuprofen"
+      ],
+      "drug_class": "nsaid"
+    },
+    "naproxen": {
+      "generic_name": "naproxen",
+      "brand_names": [
+        "aleve",
+        "naprosyn",
+        "anaprox"
+      ],
+      "active_ingredients": [
+        "naproxen"
+      ],
+      "drug_class": "nsaid"
+    },
+    "celecoxib": {
+      "generic_name": "celecoxib",
+      "brand_names": [
+        "celebrex"
+      ],
+      "active_ingredients": [
+        "celecoxib"
+      ],
+      "drug_class": "nsaid_cox2"
+    },
+    "acetaminophen": {
+      "generic_name": "acetaminophen",
+      "brand_names": [
+        "tylenol",
+        "panadol",
+        "paracetamol",
+        "calpol",
+        "mapap"
+      ],
+      "active_ingredients": [
+        "acetaminophen"
+      ],
+      "drug_class": "analgesic_antipyretic"
+    },
+    "metformin": {
+      "generic_name": "metformin",
+      "brand_names": [
+        "glucophage",
+        "fortamet",
+        "glumetza",
+        "riomet"
+      ],
+      "active_ingredients": [
+        "metformin"
+      ],
+      "drug_class": "biguanide"
+    },
+    "lisinopril": {
+      "generic_name": "lisinopril",
+      "brand_names": [
+        "prinivil",
+        "zestril",
+        "qbrelis"
+      ],
+      "active_ingredients": [
+        "lisinopril"
+      ],
+      "drug_class": "ace_inhibitor"
+    },
+    "losartan": {
+      "generic_name": "losartan",
+      "brand_names": [
+        "cozaar"
+      ],
+      "active_ingredients": [
+        "losartan"
+      ],
+      "drug_class": "angiotensin_receptor_blocker"
+    },
+    "spironolactone": {
+      "generic_name": "spironolactone",
+      "brand_names": [
+        "aldactone",
+        "carospir"
+      ],
+      "active_ingredients": [
+        "spironolactone"
+      ],
+      "drug_class": "potassium_sparing_diuretic"
+    },
+    "potassium chloride": {
+      "generic_name": "potassium chloride",
+      "brand_names": [
+        "k-dur",
+        "klor-con",
+        "micro-k",
+        "potassium chloride",
+        "potassium"
+      ],
+      "active_ingredients": [
+        "potassium chloride"
+      ],
+      "drug_class": "electrolyte_supplement"
+    },
+    "simvastatin": {
+      "generic_name": "simvastatin",
+      "brand_names": [
+        "zocor",
+        "flolipid"
+      ],
+      "active_ingredients": [
+        "simvastatin"
+      ],
+      "drug_class": "hmg_coa_reductase_inhibitor"
+    },
+    "clarithromycin": {
+      "generic_name": "clarithromycin",
+      "brand_names": [
+        "biaxin",
+        "biaxin xl"
+      ],
+      "active_ingredients": [
+        "clarithromycin"
+      ],
+      "drug_class": "macrolide_antibiotic"
+    },
+    "methotrexate": {
+      "generic_name": "methotrexate",
+      "brand_names": [
+        "trexall",
+        "otrexup",
+        "rasuvo",
+        "reditrex"
+      ],
+      "active_ingredients": [
+        "methotrexate"
+      ],
+      "drug_class": "antimetabolite"
+    },
+    "amoxicillin": {
+      "generic_name": "amoxicillin",
+      "brand_names": [
+        "amoxil",
+        "moxatag"
+      ],
+      "active_ingredients": [
+        "amoxicillin"
+      ],
+      "drug_class": "penicillin_antibiotic"
+    },
+    "amoxicillin and clavulanate potassium": {
+      "generic_name": "amoxicillin and clavulanate potassium",
+      "brand_names": [
+        "augmentin",
+        "augmentin xr",
+        "augmentin es-600",
+        "amoclan"
+      ],
+      "active_ingredients": [
+        "amoxicillin",
+        "clavulanic acid"
+      ],
+      "drug_class": "penicillin_beta_lactamase_inhibitor_combination"
+    },
+    "gabapentin": {
+      "generic_name": "gabapentin",
+      "brand_names": [
+        "neurontin",
+        "gralise",
+        "horizant"
+      ],
+      "active_ingredients": [
+        "gabapentin"
+      ],
+      "drug_class": "anticonvulsant_gaba_analog"
+    },
+    "allopurinol": {
+      "generic_name": "allopurinol",
+      "brand_names": [
+        "zyloprim",
+        "aloprim"
+      ],
+      "active_ingredients": [
+        "allopurinol"
+      ],
+      "drug_class": "xanthine_oxidase_inhibitor"
+    },
+    "propranolol": {
+      "generic_name": "propranolol",
+      "brand_names": [
+        "inderal",
+        "inderal la",
+        "innopran xl"
+      ],
+      "active_ingredients": [
+        "propranolol"
+      ],
+      "drug_class": "non_selective_beta_blocker"
+    },
+    "furosemide": {
+      "generic_name": "furosemide",
+      "brand_names": [
+        "lasix"
+      ],
+      "active_ingredients": [
+        "furosemide"
+      ],
+      "drug_class": "loop_diuretic"
+    },
+    "atorvastatin": {
+      "generic_name": "atorvastatin",
+      "brand_names": [
+        "lipitor"
+      ],
+      "active_ingredients": [
+        "atorvastatin"
+      ],
+      "drug_class": "hmg_coa_reductase_inhibitor"
+    },
+    "metoprolol": {
+      "generic_name": "metoprolol",
+      "brand_names": [
+        "lopressor",
+        "toprol xl"
+      ],
+      "active_ingredients": [
+        "metoprolol"
+      ],
+      "drug_class": "beta1_selective_blocker"
+    }
+  }
+}

@@ -1,0 +1,1 @@
+"""MedGuard API Application Module."""
