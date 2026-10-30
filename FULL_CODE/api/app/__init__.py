@@ -1,2 +1,1 @@
-"""MedGuard API Application Package."""
-__version__ = "0.1.0"
+"""MedGuard API Application Module."""
