@@ -133,6 +133,7 @@ export const DashboardPage = ({
         onAddPatient={onNavigateToAddPatient}
         onReviewMedication={() => onNavigateTab('medication-review')}
         onViewSafetyAlerts={() => onNavigateTab('safety-alerts')}
+        onUploadPrescription={() => onNavigateTab('prescription-analysis')}
       />
 
       {/* Task 2: 4 Statistic Cards */}

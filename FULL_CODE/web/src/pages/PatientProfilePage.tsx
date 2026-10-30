@@ -16,6 +16,7 @@ import {
   Activity,
   CheckCircle2,
   FileText,
+  FileUp,
 } from 'lucide-react';
 import type {
   PatientRecord,
@@ -35,6 +36,7 @@ interface PatientProfilePageProps {
   onNavigateToMedicationReview?: (patientId?: string) => void;
   onSelectAlert?: (alertId: string) => void;
   onNavigateToClinicalReport?: (patientId: string) => void;
+  onNavigateToPrescriptionAnalysis?: (patientId: string) => void;
 }
 
 type ProfileTab = 'overview' | 'allergies-conditions' | 'medications' | 'reviews' | 'alerts';
@@ -48,6 +50,7 @@ export const PatientProfilePage = ({
   onNavigateToMedicationReview,
   onSelectAlert,
   onNavigateToClinicalReport,
+  onNavigateToPrescriptionAnalysis,
 }: PatientProfilePageProps) => {
   const [activeTab, setActiveTab] = useState<ProfileTab>('overview');
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
@@ -137,6 +140,16 @@ export const PatientProfilePage = ({
           <span className="text-[11px] bg-slate-100 text-slate-600 px-2.5 py-1 rounded-md border border-slate-200 font-mono">
             ID: {patient.id}
           </span>
+          {onNavigateToPrescriptionAnalysis && (
+            <button
+              type="button"
+              onClick={() => onNavigateToPrescriptionAnalysis(patient.id)}
+              className="inline-flex items-center space-x-1.5 px-3 py-1.5 bg-[#168C83] hover:bg-[#12726b] text-white text-xs font-semibold rounded-lg shadow-xs transition-colors cursor-pointer"
+            >
+              <FileUp className="w-3.5 h-3.5" />
+              <span>Upload Prescriptions (PDF)</span>
+            </button>
+          )}
           {onNavigateToClinicalReport && (
             <button
               type="button"

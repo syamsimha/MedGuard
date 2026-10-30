@@ -11,6 +11,8 @@ import { MedicationReviewDetailPage } from './pages/MedicationReviewDetailPage';
 import { SafetyAlertsPage } from './pages/SafetyAlertsPage';
 import { SafetyAlertDetailPage } from './pages/SafetyAlertDetailPage';
 import { ClinicalReportsPage } from './pages/ClinicalReportsPage';
+import { PrescriptionAnalysisPage } from './pages/PrescriptionAnalysisPage';
+import { LoginPage } from './pages/LoginPage';
 import { PlaceholderPage } from './pages/PlaceholderPage';
 import {
   SAMPLE_PATIENTS,
@@ -26,9 +28,31 @@ import type {
   AlertReviewStatus,
 } from './types/clinical';
 import type { NavigationTab } from './types/navigation';
+import { DEMO_CREDENTIALS, type AuthUser } from './types/auth';
 import { CheckCircle2, X } from 'lucide-react';
 
 export function App() {
+  // Demonstration authentication state (Session-persisted)
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(() => {
+    try {
+      return sessionStorage.getItem('medguard_demo_auth') === 'true';
+    } catch {
+      return false;
+    }
+  });
+
+  const [currentUser, setCurrentUser] = useState<AuthUser | null>(() => {
+    try {
+      const saved = sessionStorage.getItem('medguard_current_user');
+      if (saved) return JSON.parse(saved) as AuthUser;
+      const isAuth = sessionStorage.getItem('medguard_demo_auth') === 'true';
+      if (isAuth) return DEMO_CREDENTIALS[0].user;
+      return null;
+    } catch {
+      return null;
+    }
+  });
+
   const [activeTab, setActiveTab] = useState<NavigationTab>('dashboard');
   const [searchQuery, setSearchQuery] = useState<string>('');
 
@@ -50,6 +74,9 @@ export function App() {
   // Clinical Reports patient focus state (Phase 6)
   const [selectedPatientForReportId, setSelectedPatientForReportId] = useState<string>('PT-8021');
 
+  // Prescription Analysis patient focus state
+  const [selectedPatientForAnalysisId, setSelectedPatientForAnalysisId] = useState<string | null>(null);
+
   // Shared in-memory clinical state
   const [patients, setPatients] = useState<PatientRecord[]>(SAMPLE_PATIENTS);
   const [reviews, setReviews] = useState<MedicationReviewRecord[]>(SAMPLE_MEDICATION_REVIEWS);
@@ -63,6 +90,32 @@ export function App() {
     setTimeout(() => {
       setToastMessage(null);
     }, 4500);
+  };
+
+  // Authentication Handlers
+  const handleLoginSuccess = (user: AuthUser) => {
+    try {
+      sessionStorage.setItem('medguard_demo_auth', 'true');
+      sessionStorage.setItem('medguard_current_user', JSON.stringify(user));
+    } catch {
+      // Storage fallback
+    }
+    setIsAuthenticated(true);
+    setCurrentUser(user);
+    showToast(`Welcome back, ${user.name}. Clinical session activated.`);
+  };
+
+  const handleLogout = () => {
+    try {
+      sessionStorage.removeItem('medguard_demo_auth');
+      sessionStorage.removeItem('medguard_current_user');
+    } catch {
+      // Storage fallback
+    }
+    setIsAuthenticated(false);
+    setCurrentUser(null);
+    setActiveTab('dashboard');
+    showToast('You have been signed out of MedGuard.');
   };
 
   const handleSelectTab = (tab: NavigationTab) => {
@@ -219,6 +272,14 @@ export function App() {
     setActiveTab('clinical-reports');
   };
 
+  // Prescription Analysis navigation handler
+  const handleNavigateToPrescriptionAnalysis = (patientId?: string) => {
+    if (patientId) {
+      setSelectedPatientForAnalysisId(patientId);
+    }
+    setActiveTab('prescription-analysis');
+  };
+
   // Determine dynamic Topbar title
   const getPageTitle = (tab: NavigationTab): string => {
     if (tab === 'patients') {
@@ -251,10 +312,14 @@ export function App() {
       return 'Medication Safety Alerts';
     }
 
+    if (tab === 'prescription-analysis') {
+      return 'Upload Prescriptions (PDF) & Safety Analysis';
+    }
+
     switch (tab) {
       case 'dashboard':
       case 'overview':
-        return 'Hospital Medication Safety Dashboard';
+        return 'Medication Safety Dashboard';
       case 'clinical-reports':
       case 'audit-log':
         return 'Clinical Reports & Audit Analytics';
@@ -327,6 +392,7 @@ export function App() {
             onNavigateToMedicationReview={handleNavigateToMedicationReview}
             onSelectAlert={handleSelectAlert}
             onNavigateToClinicalReport={handleNavigateToClinicalReport}
+            onNavigateToPrescriptionAnalysis={handleNavigateToPrescriptionAnalysis}
           />
         );
       }
@@ -425,6 +491,33 @@ export function App() {
       );
     }
 
+    // 6. Prescription PDF Analysis Tab
+    if (activeTab === 'prescription-analysis') {
+      return (
+        <PrescriptionAnalysisPage
+          patients={patients}
+          initialPatientId={selectedPatientForAnalysisId || undefined}
+          onViewPatientProfile={handleViewPatientProfile}
+          onBackToDashboard={() => setActiveTab('dashboard')}
+          onNavigateToMedicationReview={() => handleNavigateToMedicationReview(selectedPatientForAnalysisId || undefined)}
+          onSavePrescribedMedication={(patientId, newMed) => {
+            setPatients((prev) =>
+              prev.map((p) => {
+                if (p.id === patientId) {
+                  return {
+                    ...p,
+                    currentMedications: [newMed, ...(p.currentMedications || [])],
+                  };
+                }
+                return p;
+              })
+            );
+            showToast(`Medication order "${newMed.name}" added to patient record following simulation safety sign-off.`);
+          }}
+        />
+      );
+    }
+
     // 6. Other Clinical Tabs (Placeholder pages with roadmap context)
     return (
       <PlaceholderPage
@@ -433,6 +526,30 @@ export function App() {
       />
     );
   };
+
+  // Protected Route Guard: If user is not authenticated, show the Login Page first
+  if (!isAuthenticated) {
+    return (
+      <>
+        {/* Toast Notification Banner */}
+        {toastMessage && (
+          <div className="fixed bottom-5 right-5 z-50 flex items-center space-x-2 bg-[#17324D] text-white px-4 py-3 rounded-xl shadow-xl border border-slate-700 animate-in fade-in slide-in-from-bottom-5 duration-200">
+            <CheckCircle2 className="w-5 h-5 text-emerald-400 shrink-0" />
+            <span className="text-xs font-medium">{toastMessage}</span>
+            <button
+              type="button"
+              onClick={() => setToastMessage(null)}
+              className="p-1 hover:bg-white/10 rounded text-slate-300 hover:text-white ml-2 cursor-pointer"
+            >
+              <X className="w-4 h-4" />
+            </button>
+          </div>
+        )}
+
+        <LoginPage onLoginSuccess={handleLoginSuccess} />
+      </>
+    );
+  }
 
   return (
     <DashboardLayout
@@ -444,6 +561,8 @@ export function App() {
       alertCount={alerts.length}
       pendingReviewsCount={pendingReviewsCount}
       patientCount={patients.length}
+      currentUser={currentUser || undefined}
+      onLogout={handleLogout}
     >
       {/* Toast Notification Banner */}
       {toastMessage && (

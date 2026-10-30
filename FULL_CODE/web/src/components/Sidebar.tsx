@@ -8,7 +8,7 @@ import {
   Settings,
   ShieldCheck,
   X,
-  Building2,
+  FileUp,
 } from 'lucide-react';
 import type { NavigationTab } from '../types/navigation';
 
@@ -67,6 +67,13 @@ export const Sidebar = ({
       badgeType: 'danger',
     },
     {
+      id: 'prescription-analysis',
+      label: 'Upload Prescriptions (PDF)',
+      icon: <FileUp className="w-4 h-4" />,
+      badge: 'New',
+      badgeType: 'neutral',
+    },
+    {
       id: 'clinical-reports',
       label: 'Clinical Reports',
       icon: <BarChart3 className="w-4 h-4" />,
@@ -84,7 +91,7 @@ export const Sidebar = ({
   };
 
   const sidebarContent = (
-    <div className="h-full flex flex-col justify-between bg-white border-r border-slate-200">
+    <div className="h-full flex flex-col bg-white border-r border-slate-200">
       {/* Top Branding Section */}
       <div>
         <div className="h-16 px-5 border-b border-slate-200 flex items-center justify-between">
@@ -93,12 +100,7 @@ export const Sidebar = ({
               <ShieldCheck className="w-5 h-5" />
             </div>
             <div>
-              <div className="flex items-center space-x-1.5">
-                <span className="font-bold text-lg tracking-tight text-[#17324D]">MedGuard</span>
-                <span className="text-[9px] uppercase font-bold tracking-wider px-1.5 py-0.5 rounded bg-blue-50 text-blue-700 border border-blue-200">
-                  Phase 2
-                </span>
-              </div>
+              <span className="font-bold text-lg tracking-tight text-[#17324D] block leading-tight">MedGuard</span>
               <p className="text-[11px] text-slate-500 font-medium">Medication Safety</p>
             </div>
           </div>
@@ -163,24 +165,6 @@ export const Sidebar = ({
               );
             })}
           </nav>
-        </div>
-      </div>
-
-      {/* Bottom Facility & Environment Info */}
-      <div className="p-4 border-t border-slate-200 space-y-3 bg-slate-50/70">
-        <div className="flex items-start space-x-2.5 text-xs text-slate-600">
-          <Building2 className="w-4 h-4 text-[#168C83] shrink-0 mt-0.5" />
-          <div>
-            <div className="font-semibold text-[#17324D]">TalentAP Inpatient Center</div>
-            <div className="text-[11px] text-slate-400">Unit: Clinical Pharmacy (H4)</div>
-          </div>
-        </div>
-
-        <div className="pt-2 border-t border-slate-200/80 flex items-center justify-between text-[11px] text-slate-400">
-          <span>Demonstration UI</span>
-          <span className="font-mono text-[10px] text-slate-500 bg-white px-1.5 py-0.5 rounded border border-slate-200">
-            v0.2.0
-          </span>
         </div>
       </div>
     </div>
