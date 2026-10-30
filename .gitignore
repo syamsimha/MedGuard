@@ -43,3 +43,7 @@ yarn-error.log*
 Thumbs.db
 .vscode/
 .idea/
+
+# Datasets
+H4_Dataset/
+
