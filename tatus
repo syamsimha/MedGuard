@@ -1,0 +1,7 @@
+warning: in the working copy of 'FULL_CODE/api/app/main.py', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'FULL_CODE/api/app/models/__init__.py', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'FULL_CODE/api/app/routes/__init__.py', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'FULL_CODE/api/app/services/__init__.py', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'FULL_CODE/api/main.py', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'FULL_CODE/pipeline/README.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'FULL_CODE/pipeline/__init__.py', LF will be replaced by CRLF the next time Git touches it
