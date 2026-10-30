@@ -1,0 +1,5 @@
+{
+    "model": "TF-IDF + Logistic Regression",
+    "validation_macro_f1": 0.7920329510730013,
+    "majority_baseline_macro_f1": 0.18299246501614638
+}

@@ -44,6 +44,19 @@ Thumbs.db
 .vscode/
 .idea/
 
-# Datasets
-H4_Dataset/
 
+# Python cache
+__pycache__/
+*.py[cod]
+.pytest_cache/
+
+# Virtual environments
+.venv/
+venv/
+
+# Node dependencies
+node_modules/
+
+# Secrets
+.env
+!.env.example
