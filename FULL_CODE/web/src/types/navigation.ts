@@ -4,6 +4,7 @@ export type NavigationTab =
   | 'medication-review'
   | 'safety-alerts'
   | 'clinical-reports'
+  | 'prescription-analysis'
   | 'settings'
   // Preserved for backwards compatibility with earlier components:
   | 'overview'

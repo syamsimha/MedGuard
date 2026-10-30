@@ -5,6 +5,10 @@ import type {
   SafetyAlertRecord,
   ClinicalAnalyticsMetrics,
 } from '../types/clinical';
+import type {
+  PrescriptionAnalysisResult,
+  MedicationSimulationScenario,
+} from '../types/prescription';
 
 /**
  * Client-Side PDF Generation and Print Service for MedGuard Clinical Reports
@@ -577,5 +581,297 @@ export const exportSystemAnalyticsPdf = (
   doc.text('MedGuard Quality & Safety Intelligence • Demonstration Analytics Document', margin, pageHeight - 8);
 
   const filename = `MedGuard_System_Analytics_${metrics.periodLabel.replace(/\s+/g, '_')}_${Date.now()}.pdf`;
+  doc.save(filename);
+};
+
+export const exportPrescriptionAnalysisPdf = (
+  result: PrescriptionAnalysisResult,
+  customReportId?: string
+) => {
+  const doc = new jsPDF({
+    orientation: 'portrait',
+    unit: 'mm',
+    format: 'a4',
+  });
+
+  const pageWidth = 210;
+  const pageHeight = 297;
+  const margin = 14;
+  const contentWidth = pageWidth - margin * 2;
+  let y = 14;
+
+  const actualReportId = customReportId || `MGR-RX-${result.patient.patientId}-${Date.now().toString().slice(-4)}`;
+
+  // Header Banner
+  doc.setFillColor(23, 50, 77); // MedNavy
+  doc.rect(margin, y, contentWidth, 22, 'F');
+
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(14);
+  doc.setTextColor(255, 255, 255);
+  doc.text('MedGuard Medication Safety Engine', margin + 6, y + 9);
+
+  doc.setFont('helvetica', 'normal');
+  doc.setFontSize(8);
+  doc.setTextColor(203, 213, 225);
+  doc.text('Prescription Multi-Source PDF Extraction & H4 Dataset Analysis', margin + 6, y + 16);
+
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(8);
+  doc.setTextColor(22, 140, 131); // MedTeal
+  doc.text(`REPORT: ${actualReportId}`, margin + contentWidth - 45, y + 9);
+
+  doc.setFont('helvetica', 'normal');
+  doc.setFontSize(7);
+  doc.setTextColor(203, 213, 225);
+  doc.text(result.analyzedAt, margin + contentWidth - 45, y + 16);
+
+  y += 26;
+
+  // Patient Demographic Box
+  doc.setFillColor(248, 250, 252);
+  doc.setDrawColor(226, 232, 240);
+  doc.rect(margin, y, contentWidth, 24, 'FD');
+
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(9);
+  doc.setTextColor(23, 50, 77);
+  doc.text(`Patient: ${result.patient.name} (${result.patient.patientId})`, margin + 4, y + 6);
+
+  doc.setFont('helvetica', 'normal');
+  doc.setFontSize(7.5);
+  doc.setTextColor(71, 85, 105);
+  doc.text(`Demographics: ${result.patient.ageOrDob} • ${result.patient.gender} • Wt: ${result.patient.weight || 'N/A'}`, margin + 4, y + 12);
+  doc.text(`Allergies: ${result.patient.allergies || 'None documented'}`, margin + 4, y + 17);
+  doc.text(`Renal Context: ${result.patient.renalHistory || 'Baseline clearance'}`, margin + 4, y + 22);
+
+  y += 28;
+
+  // Extracted Medications Table
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(10);
+  doc.setTextColor(23, 50, 77);
+  doc.text(`Extracted Medication Regimen (${result.medications.length} items)`, margin, y + 4);
+  y += 7;
+
+  doc.setFillColor(241, 245, 249);
+  doc.rect(margin, y, contentWidth, 6, 'F');
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(7.5);
+  doc.setTextColor(71, 85, 105);
+  doc.text('Medicine / Ingredient', margin + 3, y + 4);
+  doc.text('Dosage & Strength', margin + 65, y + 4);
+  doc.text('Frequency & Route', margin + 110, y + 4);
+  doc.text('Source Document', margin + 145, y + 4);
+  y += 6;
+
+  result.medications.forEach((med) => {
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(7.5);
+    doc.setTextColor(15, 23, 42);
+    doc.text(med.name, margin + 3, y + 4);
+
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(7);
+    doc.setTextColor(71, 85, 105);
+    doc.text(`${med.dosage} (${med.strength || ''})`, margin + 65, y + 4);
+    doc.text(`${med.frequency} • ${med.route}`, margin + 110, y + 4);
+    doc.text(med.sourceFile.substring(0, 24), margin + 145, y + 4);
+
+    doc.setDrawColor(241, 245, 249);
+    doc.line(margin, y + 5.5, margin + contentWidth, y + 5.5);
+    y += 6.5;
+  });
+
+  y += 4;
+
+  // H4 Safety Findings
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(10);
+  doc.setTextColor(23, 50, 77);
+  doc.text(`H4 Safety Findings & Contraindications (${result.findings.length})`, margin, y + 4);
+  y += 7;
+
+  result.findings.forEach((f) => {
+    doc.setFillColor(254, 242, 242);
+    if (f.severity === 'Critical') {
+      doc.setFillColor(254, 242, 242);
+    } else if (f.severity === 'High') {
+      doc.setFillColor(255, 251, 235);
+    } else {
+      doc.setFillColor(240, 253, 250);
+    }
+
+    doc.rect(margin, y, contentWidth, 14, 'F');
+    doc.setDrawColor(226, 232, 240);
+    doc.rect(margin, y, contentWidth, 14, 'D');
+
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(7.5);
+    if (f.severity === 'Critical') {
+      doc.setTextColor(225, 29, 72);
+    } else if (f.severity === 'High') {
+      doc.setTextColor(217, 119, 6);
+    } else {
+      doc.setTextColor(13, 148, 136);
+    }
+    doc.text(`[${f.severity.toUpperCase()}] ${f.category}: ${f.affectedMedications.join(' + ')}`, margin + 3, y + 4.5);
+
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(6.5);
+    doc.setTextColor(51, 65, 85);
+    const splitExplanation = doc.splitTextToSize(f.explanation, contentWidth - 6);
+    doc.text(splitExplanation.slice(0, 2), margin + 3, y + 8.5);
+
+    y += 16;
+  });
+
+  // Footer Disclaimer
+  doc.setFont('helvetica', 'normal');
+  doc.setFontSize(6.5);
+  doc.setTextColor(148, 163, 184);
+  doc.text('MedGuard Hospital Clinical Intelligence • H4 Medication Safety Engine Validation Document', margin, pageHeight - 8);
+
+  const filename = `MedGuard_Prescription_Safety_Report_${result.patient.patientId}_${Date.now()}.pdf`;
+  doc.save(filename);
+};
+
+export const exportProposedMedicationSimulationPdf = (
+  scenario: MedicationSimulationScenario,
+  patientName: string,
+  patientId: string
+) => {
+  const doc = new jsPDF({
+    orientation: 'portrait',
+    unit: 'mm',
+    format: 'a4',
+  });
+
+  const pageWidth = 210;
+  const pageHeight = 297;
+  const margin = 14;
+  const contentWidth = pageWidth - margin * 2;
+  let y = 14;
+
+  // Header Banner
+  doc.setFillColor(23, 50, 77); // MedNavy
+  doc.rect(margin, y, contentWidth, 24, 'F');
+
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(13);
+  doc.setTextColor(255, 255, 255);
+  doc.text('MedGuard Proposed Medication Simulation Report', margin + 6, y + 8);
+
+  doc.setFont('helvetica', 'normal');
+  doc.setFontSize(8);
+  doc.setTextColor(203, 213, 225);
+  doc.text('Hypothetical Safety Evaluation Against Verified Prescription Regimen', margin + 6, y + 15);
+
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(8);
+  doc.setTextColor(234, 179, 8); // Amber
+  doc.text('SIMULATION / UNPRESCRIBED', margin + contentWidth - 48, y + 8);
+
+  doc.setFont('helvetica', 'normal');
+  doc.setFontSize(7);
+  doc.setTextColor(203, 213, 225);
+  doc.text(scenario.testedAt, margin + contentWidth - 48, y + 15);
+
+  y += 28;
+
+  // Patient & Proposed Drug Box
+  doc.setFillColor(239, 246, 255);
+  doc.setDrawColor(191, 219, 254);
+  doc.rect(margin, y, contentWidth, 26, 'FD');
+
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(9);
+  doc.setTextColor(23, 50, 77);
+  doc.text(`Patient: ${patientName} (${patientId})`, margin + 4, y + 6);
+
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(8.5);
+  doc.setTextColor(15, 118, 110);
+  doc.text(`Proposed Medication: ${scenario.proposedMedication.name} (${scenario.proposedMedication.strength || 'Proposed Dose'})`, margin + 4, y + 12);
+
+  doc.setFont('helvetica', 'normal');
+  doc.setFontSize(7.5);
+  doc.setTextColor(71, 85, 105);
+  doc.text(`Regimen: ${scenario.proposedMedication.dosage} • ${scenario.proposedMedication.frequency} • ${scenario.proposedMedication.route} • Duration: ${scenario.proposedMedication.proposedDuration || 'Ongoing'}`, margin + 4, y + 18);
+  doc.text(`Result: +${scenario.newFindingsCount} New Risk(s) Introduced • ${scenario.preExistingFindingsCount} Pre-Existing Baseline Risks`, margin + 4, y + 23);
+
+  y += 30;
+
+  // New Findings Introduced Section
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(9.5);
+  doc.setTextColor(190, 18, 60);
+  doc.text(`NEW RISKS SPECIFICALLY INTRODUCED BY PROPOSED MEDICATION (${scenario.newFindingsCount})`, margin, y + 4);
+  y += 7;
+
+  const newFindings = scenario.simulatedFindings.filter((f) => f.isNewFinding);
+  if (newFindings.length === 0) {
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(8);
+    doc.setTextColor(71, 85, 105);
+    doc.text('No new adverse interactions or contraindications identified for this proposed medication.', margin + 2, y + 4);
+    y += 8;
+  } else {
+    newFindings.forEach((f) => {
+      doc.setFillColor(254, 242, 242);
+      doc.setDrawColor(254, 205, 211);
+      doc.rect(margin, y, contentWidth, 14, 'FD');
+
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(7.5);
+      doc.setTextColor(190, 18, 60);
+      doc.text(`[NEW - ${f.severity.toUpperCase()}] ${f.category}: ${f.affectedMedications.join(' + ')}`, margin + 3, y + 4.5);
+
+      doc.setFont('helvetica', 'normal');
+      doc.setFontSize(6.5);
+      doc.setTextColor(51, 65, 85);
+      const splitText = doc.splitTextToSize(f.explanation, contentWidth - 6);
+      doc.text(splitText.slice(0, 2), margin + 3, y + 8.5);
+
+      y += 16;
+    });
+  }
+
+  y += 4;
+
+  // Pre-existing baseline findings
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(9.5);
+  doc.setTextColor(23, 50, 77);
+  doc.text(`PRE-EXISTING UNCHANGED RISKS FROM EXISTING REGIMEN (${scenario.preExistingFindingsCount})`, margin, y + 4);
+  y += 7;
+
+  const baselineFindings = scenario.simulatedFindings.filter((f) => !f.isNewFinding);
+  baselineFindings.slice(0, 3).forEach((f) => {
+    doc.setFillColor(248, 250, 252);
+    doc.setDrawColor(226, 232, 240);
+    doc.rect(margin, y, contentWidth, 12, 'FD');
+
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(7);
+    doc.setTextColor(71, 85, 105);
+    doc.text(`[BASELINE - ${f.severity}] ${f.category}: ${f.affectedMedications.join(' + ')}`, margin + 3, y + 4);
+
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(6.5);
+    doc.setTextColor(100, 116, 139);
+    const splitText = doc.splitTextToSize(f.explanation, contentWidth - 6);
+    doc.text(splitText.slice(0, 1), margin + 3, y + 8);
+
+    y += 14;
+  });
+
+  // Footer Disclaimer
+  doc.setFont('helvetica', 'normal');
+  doc.setFontSize(6.5);
+  doc.setTextColor(148, 163, 184);
+  doc.text('MedGuard Hypothetical Clinical Simulation • NOT AN OFFICIAL PRESCRIBED ORDER • Requires Attending Sign-Off', margin, pageHeight - 8);
+
+  const filename = `MedGuard_Simulation_${scenario.proposedMedication.name}_${Date.now()}.pdf`;
   doc.save(filename);
 };

@@ -2,6 +2,7 @@ import { useState, type ReactNode } from 'react';
 import { Sidebar } from '../components/Sidebar';
 import { Topbar } from '../components/Topbar';
 import type { NavigationTab } from '../types/navigation';
+import type { AuthUser } from '../types/auth';
 
 interface DashboardLayoutProps {
   children: ReactNode;
@@ -13,6 +14,8 @@ interface DashboardLayoutProps {
   alertCount?: number;
   pendingReviewsCount?: number;
   patientCount?: number;
+  currentUser?: AuthUser;
+  onLogout?: () => void;
 }
 
 export const DashboardLayout = ({
@@ -25,6 +28,8 @@ export const DashboardLayout = ({
   alertCount,
   pendingReviewsCount,
   patientCount,
+  currentUser,
+  onLogout,
 }: DashboardLayoutProps) => {
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
 
@@ -49,6 +54,9 @@ export const DashboardLayout = ({
           onOpenMobileSidebar={() => setMobileSidebarOpen(true)}
           searchQuery={searchQuery}
           onSearchChange={onSearchChange}
+          currentUser={currentUser}
+          onLogout={onLogout}
+          onNavigateToPrescriptionUpload={() => onSelectTab('prescription-analysis')}
         />
 
         {/* Scrollable Page Body */}
